@@ -21,7 +21,9 @@ interface LocationModalProps {
 // Component to update map center
 function ChangeView({ center }: { center: [number, number] }) {
   const map = useMap();
-  map.setView(center);
+  useEffect(() => {
+    map.setView(center);
+  }, [center, map]);
   return null;
 }
 
@@ -29,6 +31,7 @@ const LocationModal: React.FC<LocationModalProps> = ({ isOpen, onClose, onSelect
   const [searchQuery, setSearchQuery] = useState('');
   const [center, setCenter] = useState<[number, number]>([28.6139, 77.2090]); // Default to Delhi
   const [address, setAddress] = useState('');
+  const [markerPosition, setMarkerPosition] = useState<[number, number]>([28.6139, 77.2090]);
 
   const handleCurrentLocation = () => {
     if (navigator.geolocation) {
@@ -36,18 +39,23 @@ const LocationModal: React.FC<LocationModalProps> = ({ isOpen, onClose, onSelect
         async (position) => {
           const newLocation: [number, number] = [
             position.coords.latitude,
-            position.coords.longitude
+            position.coords.longitude,
           ];
           setCenter(newLocation);
-          
-          // Reverse geocoding using Nominatim
+          setMarkerPosition(newLocation);
+
+          // Reverse geocoding
           try {
             const response = await fetch(
               `https://nominatim.openstreetmap.org/reverse?format=json&lat=${newLocation[0]}&lon=${newLocation[1]}`
             );
             const data = await response.json();
-            setAddress(data.display_name);
-            setSearchQuery(data.display_name);
+            if (data.display_name) {
+              setAddress(data.display_name);
+              setSearchQuery(data.display_name);
+            } else {
+              setAddress('Unknown Location');
+            }
           } catch (error) {
             console.error('Error getting address:', error);
             setAddress('Current Location');
@@ -55,8 +63,11 @@ const LocationModal: React.FC<LocationModalProps> = ({ isOpen, onClose, onSelect
         },
         (error) => {
           console.error('Error getting location:', error);
+          alert('Failed to get location. Please allow location access in your browser.');
         }
       );
+    } else {
+      alert('Geolocation is not supported by this browser.');
     }
   };
 
@@ -69,7 +80,9 @@ const LocationModal: React.FC<LocationModalProps> = ({ isOpen, onClose, onSelect
         const data = await response.json();
         if (data.length > 0) {
           const { lat, lon, display_name } = data[0];
-          setCenter([parseFloat(lat), parseFloat(lon)]);
+          const newCoords: [number, number] = [parseFloat(lat), parseFloat(lon)];
+          setCenter(newCoords);
+          setMarkerPosition(newCoords);
           setAddress(display_name);
         }
       } catch (error) {
@@ -127,7 +140,7 @@ const LocationModal: React.FC<LocationModalProps> = ({ isOpen, onClose, onSelect
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              <Marker position={center} />
+              <Marker position={markerPosition} />
               <ChangeView center={center} />
             </MapContainer>
           </div>
@@ -144,8 +157,8 @@ const LocationModal: React.FC<LocationModalProps> = ({ isOpen, onClose, onSelect
             onClick={() => {
               onSelectLocation({
                 address: address || searchQuery || 'Selected Location',
-                lat: center[0],
-                lng: center[1]
+                lat: markerPosition[0],
+                lng: markerPosition[1],
               });
               onClose();
             }}
