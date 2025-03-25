@@ -36,7 +36,7 @@ const Login = () => {
         if (isLogin) {
           await signIn(email, password);
           if (email === 'admin@urbancompany.com') {
-            toast.success('Welcome back, Admin!');
+            toast.success('Hamara__Service, Admin!');
           } else {
             toast.success('Successfully logged in!');
           }
@@ -73,11 +73,11 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden transform transition-all duration-700 ease-in-out animate__animated animate__fadeIn">
         <div className="p-8">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold">
-              {isAdmin ? 'Admin Login' : (isLogin ? 'Welcome Back!' : 'Create Account')}
+            <h2 className="text-3xl font-bold text-blue-600">
+              {isAdmin ? 'Admin Login' : (isLogin ? 'Hamara_Service' : 'Create Account')}
             </h2>
             <button
               onClick={() => {
@@ -95,17 +95,13 @@ const Login = () => {
           </div>
 
           {!isAdmin && (
-            <div className="flex justify-center space-x-4 mb-6">
+            <div className="flex justify-center space-x-4 mb-6 animate__animated animate__fadeIn animate__delay-1s">
               <button
                 onClick={() => {
                   setAuthMethod('email');
                   setShowOtpInput(false);
                 }}
-                className={`px-4 py-2 rounded-lg ${
-                  authMethod === 'email'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-600'
-                }`}
+                className={`px-4 py-2 rounded-lg ${authMethod === 'email' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600'}`}
               >
                 Email
               </button>
@@ -114,24 +110,18 @@ const Login = () => {
                   setAuthMethod('phone');
                   setShowOtpInput(false);
                 }}
-                className={`px-4 py-2 rounded-lg ${
-                  authMethod === 'phone'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-600'
-                }`}
+                className={`px-4 py-2 rounded-lg ${authMethod === 'phone' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600'}`}
               >
                 Phone
               </button>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6 animate__animated animate__fadeIn animate__delay-2s">
             {(isAdmin || authMethod === 'email') && (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Email
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                   <div className="relative">
                     <input
                       type="email"
@@ -146,9 +136,7 @@ const Login = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Password
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
                   <div className="relative">
                     <input
                       type="password"
@@ -167,9 +155,7 @@ const Login = () => {
             {!isAdmin && authMethod === 'phone' && (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Phone Number
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                   <div className="relative">
                     <input
                       type="tel"
@@ -186,9 +172,7 @@ const Login = () => {
 
                 {showOtpInput && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      OTP
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">OTP</label>
                     <input
                       type="text"
                       value={otp}
@@ -234,7 +218,7 @@ const Login = () => {
           </form>
 
           {!isAdmin && (
-            <div className="mt-6">
+            <div className="mt-6 animate__animated animate__fadeIn animate__delay-3s">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-300"></div>
