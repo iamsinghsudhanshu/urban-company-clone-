@@ -77,7 +77,7 @@ const Login = () => {
         <div className="p-8">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold text-blue-600">
-              {isAdmin ? 'Admin Login' : (isLogin ? 'Hamara_Service' : 'Create Account')}
+              {isAdmin ? 'Admin Login' : (isLogin ? 'Our_Service' : 'Create Account')}
             </h2>
             <button
               onClick={() => {
